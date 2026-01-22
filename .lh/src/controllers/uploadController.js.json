@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/controllers/uploadController.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1766931502629,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1766931502629,
+            "name": "Commit-0",
+            "content": "const { uploadBufferToCloudinary } = require(\"../utils/cloudinaryUpload\");\nconst cloudinary = require(\"../config/cloudinary\");\n\nexports.uploadFiles = async (req, res) => {\n  try {\n    if (!req.files || req.files.length === 0) {\n      return res.status(400).json({ success: false, message: \"No files uploaded\" });\n    }\n\n    const folder = process.env.CLOUDINARY_FOLDER || \"unlock\";\n\n    const uploaded = [];\n\n    for (const file of req.files) {\n      const result = await uploadBufferToCloudinary(file.buffer, {\n        folder: `${folder}/listings`,\n      });\n\n      uploaded.push({\n        url: result.secure_url,\n        publicId: result.public_id,\n        resourceType: result.resource_type, // image / raw / video\n        originalName: file.originalname,\n        mimeType: file.mimetype,\n        bytes: result.bytes,\n      });\n    }\n\n    return res.json({\n      success: true,\n      message: \"Files uploaded successfully\",\n      files: uploaded,\n    });\n  } catch (err) {\n    return res.status(500).json({\n      success: false,\n      message: \"Upload failed\",\n      error: err.message,\n    });\n  }\n};\n\nexports.deleteFile = async (req, res) => {\n  try {\n    const { publicId, resourceType } = req.body;\n\n    if (!publicId) {\n      return res.status(400).json({ success: false, message: \"publicId is required\" });\n    }\n\n    // resourceType matters sometimes (image vs raw). Default to \"image\" if missing.\n    const rt = resourceType || \"image\";\n\n    const result = await cloudinary.uploader.destroy(publicId, { resource_type: rt });\n\n    return res.json({\n      success: true,\n      message: \"File delete attempted\",\n      result,\n    });\n  } catch (err) {\n    return res.status(500).json({ success: false, message: \"Delete failed\", error: err.message });\n  }\n};\n"
+        }
+    ]
+}

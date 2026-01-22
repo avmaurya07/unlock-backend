@@ -1,0 +1,38 @@
+{
+    "sourceFile": "src/app.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1765739207472,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766174264054,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -16,5 +16,7 @@\n app.get(\"/\", (req, res) => {\n   res.send(\"Backend API Running...\");\n });\n \n+\n+\n module.exports = app;\n"
+                },
+                {
+                    "date": 1766174269776,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,23 @@\n+const express = require(\"express\");\n+const cors = require(\"cors\");\n+const morgan = require(\"morgan\");\n+const cookieParser = require(\"cookie-parser\");\n+\n+const app = express();\n+\n+app.use(cors());\n+app.use(express.json());\n+app.use(cookieParser());\n+app.use(morgan(\"dev\"));\n+\n+// Add routes later\n+// app.use(\"/api/auth\", require(\"./routes/authRoutes\"));\n+app.use(\"/api/auth\", require(\"./routes/authRoutes\"));\n+\n+app.get(\"/\", (req, res) => {\n+  res.send(\"Backend API Running...\");\n+});\n+\n+\n+\n+module.exports = app;\n"
+                },
+                {
+                    "date": 1766944344384,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -20,26 +20,4 @@\n \n \n \n module.exports = app;\n-const express = require(\"express\");\n-const cors = require(\"cors\");\n-const morgan = require(\"morgan\");\n-const cookieParser = require(\"cookie-parser\");\n-\n-const app = express();\n-\n-app.use(cors());\n-app.use(express.json());\n-app.use(cookieParser());\n-app.use(morgan(\"dev\"));\n-\n-// Add routes later\n-// app.use(\"/api/auth\", require(\"./routes/authRoutes\"));\n-\n-app.get(\"/\", (req, res) => {\n-  res.send(\"Backend API Running...\");\n-});\n-\n-\n-\n-module.exports = app;\n"
+                },
+                {
+                    "date": 1766944352642,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,15 +9,16 @@\n app.use(express.json());\n app.use(cookieParser());\n app.use(morgan(\"dev\"));\n \n-// Add routes later\n-// app.use(\"/api/auth\", require(\"./routes/authRoutes\"));\n+// Routes\n app.use(\"/api/auth\", require(\"./routes/authRoutes\"));\n+app.use(\"/api/publisher\", require(\"./routes/publisherRoutes\"));\n+app.use(\"/api/listings\", require(\"./routes/listingRoutes\"));\n+app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n+app.use(\"/api/publisher/dashboard\", require(\"./routes/publisherDashboardRoutes\"));\n+app.use(\"/api/uploads\", require(\"./routes/uploadRoutes\"));\n+app.use(\"/api/admin/dashboard\", require(\"./routes/adminDashboardRoutes\"));\n \n-app.get(\"/\", (req, res) => {\n-  res.send(\"Backend API Running...\");\n-});\n+app.get(\"/\", (req, res) => res.send(\"Backend API Running...\"));\n \n-\n-\n module.exports = app;\n"
+                },
+                {
+                    "date": 1766947979099,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,8 +17,11 @@\n app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n app.use(\"/api/publisher/dashboard\", require(\"./routes/publisherDashboardRoutes\"));\n app.use(\"/api/uploads\", require(\"./routes/uploadRoutes\"));\n app.use(\"/api/admin/dashboard\", require(\"./routes/adminDashboardRoutes\"));\n+app.use(\"/api/public\", require(\"./routes/publicRoutes\"));\n+app.use(\"/api/admin/publisher-types\", require(\"./routes/adminPublisherTypeRoutes\"));\n \n+\n app.get(\"/\", (req, res) => res.send(\"Backend API Running...\"));\n \n module.exports = app;\n"
+                }
+            ],
+            "date": 1765739207472,
+            "name": "Commit-0",
+            "content": "const express = require(\"express\");\nconst cors = require(\"cors\");\nconst morgan = require(\"morgan\");\nconst cookieParser = require(\"cookie-parser\");\n\nconst app = express();\n\napp.use(cors());\napp.use(express.json());\napp.use(cookieParser());\napp.use(morgan(\"dev\"));\n\n// Add routes later\n// app.use(\"/api/auth\", require(\"./routes/authRoutes\"));\n\napp.get(\"/\", (req, res) => {\n  res.send(\"Backend API Running...\");\n});\n\nmodule.exports = app;\n"
+        }
+    ]
+}

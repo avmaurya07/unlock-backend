@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/controllers/adminSubscriptionController.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1766928909634,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1766928909634,
+            "name": "Commit-0",
+            "content": "const SubscriptionPlan = require(\"../models/SubscriptionPlan\");\nconst ServicePlan = require(\"../models/ServicePlan\");\nconst Publisher = require(\"../models/Publisher\");\n\n\n// CREATE OR UPDATE Subscription plan (3/6/9 months)\nexports.createOrUpdateSubscriptionPlan = async (req, res) => {\n  try {\n    const { durationInMonths, price } = req.body;\n\n    if (![3, 6, 9].includes(durationInMonths)) {\n      return res.status(400).json({\n        success: false,\n        message: \"Invalid duration. Allowed: 3, 6, 9 months\"\n      });\n    }\n\n    const plan = await SubscriptionPlan.findOneAndUpdate(\n      { durationInMonths },\n      { price, isActive: true },\n      { new: true, upsert: true }\n    );\n\n    res.json({\n      success: true,\n      message: \"Plan saved successfully\",\n      plan\n    });\n\n  } catch (err) {\n    res.status(500).json({ success: false, message: err.message });\n  }\n};\n\n\n// GET all subscription plans\nexports.getSubscriptionPlans = async (req, res) => {\n  const plans = await SubscriptionPlan.find({ isActive: true });\n  res.json({ success: true, plans });\n};\n\n\n// CREATE or UPDATE Yearly Service Fee\nexports.createOrUpdateServicePlan = async (req, res) => {\n  try {\n    const { yearlyPrice } = req.body;\n\n    const plan = await ServicePlan.findOneAndUpdate(\n      {},\n      { yearlyPrice },\n      { new: true, upsert: true }\n    );\n\n    res.json({\n      success: true,\n      message: \"Service plan updated\",\n      plan\n    });\n\n  } catch (err) {\n    res.status(500).json({ success: false, message: err.message });\n  }\n};\n\n\n// GET yearly service fee\nexports.getServicePlan = async (req, res) => {\n  const plan = await ServicePlan.findOne({});\n  res.json({ success: true, plan });\n};\n\n\n// ADMIN Extend Subscription\nexports.extendPublisherSubscription = async (req, res) => {\n  try {\n    const { months } = req.body;\n    const { publisherId } = req.params;\n\n    const publisher = await Publisher.findById(publisherId);\n    if (!publisher) return res.status(404).json({ success: false, message: \"Publisher not found\" });\n\n    const newExpiry = new Date(publisher.subscriptionExpiry || new Date());\n    newExpiry.setMonth(newExpiry.getMonth() + months);\n\n    publisher.subscriptionExpiry = newExpiry;\n    publisher.subscriptionStatus = \"active\";\n\n    await publisher.save();\n\n    res.json({\n      success: true,\n      message: \"Subscription extended\",\n      expiry: newExpiry\n    });\n\n  } catch (err) {\n    res.status(500).json({ success: false, message: err.message });\n  }\n};\n\n\n// ADMIN Suspend Publisher Subscription\nexports.suspendPublisherSubscription = async (req, res) => {\n  try {\n    const { publisherId } = req.params;\n\n    const publisher = await Publisher.findByIdAndUpdate(\n      publisherId,\n      { subscriptionStatus: \"suspended\" },\n      { new: true }\n    );\n\n    res.json({\n      success: true,\n      message: \"Subscription suspended\",\n      publisher\n    });\n\n  } catch (err) {\n    res.status(500).json({ success: false, message: err.message });\n  }\n};\n"
+        }
+    ]
+}

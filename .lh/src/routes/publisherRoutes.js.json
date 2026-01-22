@@ -1,0 +1,50 @@
+{
+    "sourceFile": "src/routes/publisherRoutes.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 8,
+            "patches": [
+                {
+                    "date": 1766923388699,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766944885675,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middlewares/authMiddleware\");\n-const role = require(\"../middlewares/roleMiddleware\");\n+const auth = require(\"../middleware/authMiddleware\");\n+const role = require(\"../middleware/roleMiddleware\");\n \n const {\n   createPublisher,\n   getMyPublisherProfile,\n"
+                },
+                {
+                    "date": 1766945220330,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middleware/authMiddleware\");\n+const { protect } = require(\"../middleware/authMiddleware\");\n const role = require(\"../middleware/roleMiddleware\");\n \n const {\n   createPublisher,\n"
+                },
+                {
+                    "date": 1766945245670,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,13 +10,13 @@\n   updatePublisher,\n } = require(\"../controllers/publisherController\");\n \n // Create onboarding profile\n-router.post(\"/create\", auth, role(\"publisher\"), createPublisher);\n+router.post(\"/create\", const { protect } = require(\"../middleware/authMiddleware\");, role(\"publisher\"), createPublisher);\n \n // Fetch profile\n-router.get(\"/me\", auth, role(\"publisher\"), getMyPublisherProfile);\n+router.get(\"/me\", const { protect } = require(\"../middleware/authMiddleware\");, role(\"publisher\"), getMyPublisherProfile);\n \n // Update profile\n-router.patch(\"/update\", auth, role(\"publisher\"), updatePublisher);\n+router.patch(\"/update\", const { protect } = require(\"../middleware/authMiddleware\");, role(\"publisher\"), updatePublisher);\n \n module.exports = router;\n"
+                },
+                {
+                    "date": 1766945252550,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,13 +10,13 @@\n   updatePublisher,\n } = require(\"../controllers/publisherController\");\n \n // Create onboarding profile\n-router.post(\"/create\", const { protect } = require(\"../middleware/authMiddleware\");, role(\"publisher\"), createPublisher);\n+router.post(\"/create\", protect, role(\"publisher\"), createPublisher);\n \n // Fetch profile\n-router.get(\"/me\", const { protect } = require(\"../middleware/authMiddleware\");, role(\"publisher\"), getMyPublisherProfile);\n+router.get(\"/me\", protect, role(\"publisher\"), getMyPublisherProfile);\n \n // Update profile\n-router.patch(\"/update\", const { protect } = require(\"../middleware/authMiddleware\");, role(\"publisher\"), updatePublisher);\n+router.patch(\"/update\", protect, role(\"publisher\"), updatePublisher);\n \n module.exports = router;\n"
+                },
+                {
+                    "date": 1766945549097,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,5 +18,7 @@\n \n // Update profile\n router.patch(\"/update\", protect, role(\"publisher\"), updatePublisher);\n \n+\n+\n module.exports = router;\n"
+                },
+                {
+                    "date": 1766945719714,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,7 +18,10 @@\n \n // Update profile\n router.patch(\"/update\", protect, role(\"publisher\"), updatePublisher);\n \n+console.log(\"typeof protect:\", typeof protect);\n+console.log(\"typeof role:\", typeof role);\n+console.log(\"typeof role('publisher'):\", typeof role(\"publisher\"));\n+console.log(\"AUTH TYPE:\", typeof auth);\n \n-\n module.exports = router;\n"
+                },
+                {
+                    "date": 1766946439490,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,8 +9,11 @@\n   getMyPublisherProfile,\n   updatePublisher,\n } = require(\"../controllers/publisherController\");\n \n+\n+\n+\n // Create onboarding profile\n router.post(\"/create\", protect, role(\"publisher\"), createPublisher);\n \n // Fetch profile\n"
+                },
+                {
+                    "date": 1766946560980,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,9 +11,14 @@\n } = require(\"../controllers/publisherController\");\n \n \n \n+console.log(\"typeof protect:\", typeof protect);\n+console.log(\"typeof role:\", typeof role);\n+console.log(\"typeof role('publisher'):\", typeof role(\"publisher\"));\n+console.log(\"typeof createPublisher:\", typeof createPublisher);\n \n+\n // Create onboarding profile\n router.post(\"/create\", protect, role(\"publisher\"), createPublisher);\n \n // Fetch profile\n"
+                }
+            ],
+            "date": 1766923388699,
+            "name": "Commit-0",
+            "content": "const express = require(\"express\");\nconst router = express.Router();\n\nconst auth = require(\"../middlewares/authMiddleware\");\nconst role = require(\"../middlewares/roleMiddleware\");\n\nconst {\n  createPublisher,\n  getMyPublisherProfile,\n  updatePublisher,\n} = require(\"../controllers/publisherController\");\n\n// Create onboarding profile\nrouter.post(\"/create\", auth, role(\"publisher\"), createPublisher);\n\n// Fetch profile\nrouter.get(\"/me\", auth, role(\"publisher\"), getMyPublisherProfile);\n\n// Update profile\nrouter.patch(\"/update\", auth, role(\"publisher\"), updatePublisher);\n\nmodule.exports = router;\n"
+        }
+    ]
+}

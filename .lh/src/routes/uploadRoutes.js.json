@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/routes/uploadRoutes.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1766931519186,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766944896665,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,11 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middlewares/authMiddleware\");\n-const role = require(\"../middlewares/roleMiddleware\");\n-const subscriptionCheck = require(\"../middlewares/subscriptionCheck\");\n-const upload = require(\"../middlewares/uploadMiddleware\");\n+const auth = require(\"../middleware/authMiddleware\");\n+const role = require(\"../middleware/roleMiddleware\");\n+const subscriptionCheck = require(\"../middleware/subscriptionCheck\");\n+const upload = require(\"../middleware/uploadMiddleware\");\n \n const { uploadFiles, deleteFile } = require(\"../controllers/uploadController\");\n \n // Upload multiple files: field name \"files\"\n"
+                },
+                {
+                    "date": 1766946076004,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middleware/authMiddleware\");\n+const {auth} = require(\"../middleware/authMiddleware\");\n const role = require(\"../middleware/roleMiddleware\");\n const subscriptionCheck = require(\"../middleware/subscriptionCheck\");\n const upload = require(\"../middleware/uploadMiddleware\");\n \n"
+                },
+                {
+                    "date": 1766946082099,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const {auth} = require(\"../middleware/authMiddleware\");\n+const {protect} = require(\"../middleware/authMiddleware\");\n const role = require(\"../middleware/roleMiddleware\");\n const subscriptionCheck = require(\"../middleware/subscriptionCheck\");\n const upload = require(\"../middleware/uploadMiddleware\");\n \n@@ -10,15 +10,15 @@\n \n // Upload multiple files: field name \"files\"\n router.post(\n   \"/\",\n-  auth,\n+  protect,\n   role(\"publisher\"),\n   subscriptionCheck,\n   upload.array(\"files\", 10),\n   uploadFiles\n );\n \n // Delete file by publicId\n-router.delete(\"/\", auth, role(\"publisher\"), subscriptionCheck, deleteFile);\n+router.delete(\"/\", protect, role(\"publisher\"), subscriptionCheck, deleteFile);\n \n module.exports = router;\n"
+                }
+            ],
+            "date": 1766931519186,
+            "name": "Commit-0",
+            "content": "const express = require(\"express\");\nconst router = express.Router();\n\nconst auth = require(\"../middlewares/authMiddleware\");\nconst role = require(\"../middlewares/roleMiddleware\");\nconst subscriptionCheck = require(\"../middlewares/subscriptionCheck\");\nconst upload = require(\"../middlewares/uploadMiddleware\");\n\nconst { uploadFiles, deleteFile } = require(\"../controllers/uploadController\");\n\n// Upload multiple files: field name \"files\"\nrouter.post(\n  \"/\",\n  auth,\n  role(\"publisher\"),\n  subscriptionCheck,\n  upload.array(\"files\", 10),\n  uploadFiles\n);\n\n// Delete file by publicId\nrouter.delete(\"/\", auth, role(\"publisher\"), subscriptionCheck, deleteFile);\n\nmodule.exports = router;\n"
+        }
+    ]
+}

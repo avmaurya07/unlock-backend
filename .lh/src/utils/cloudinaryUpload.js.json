@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/utils/cloudinaryUpload.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1766931481419,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1766931481419,
+            "name": "Commit-0",
+            "content": "const cloudinary = require(\"../config/cloudinary\");\n\nfunction uploadBufferToCloudinary(buffer, options = {}) {\n  return new Promise((resolve, reject) => {\n    const stream = cloudinary.uploader.upload_stream(\n      { resource_type: \"auto\", ...options },\n      (error, result) => {\n        if (error) return reject(error);\n        resolve(result);\n      }\n    );\n\n    stream.end(buffer);\n  });\n}\n\nmodule.exports = { uploadBufferToCloudinary };\n"
+        }
+    ]
+}

@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/middleware/subscriptionCheck.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1766930487686,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1767934431665,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,4 +1,7 @@\n+\n+\n+\n module.exports = function checkSubscription(req, res, next) {\n   if (req.user.role !== \"publisher\") return next();\n \n   const now = new Date();\n"
+                },
+                {
+                    "date": 1767934439827,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n \n+const Publisher = require(\"../models/Publisher\");\n \n \n module.exports = function checkSubscription(req, res, next) {\n   if (req.user.role !== \"publisher\") return next();\n"
+                },
+                {
+                    "date": 1767934470037,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,25 +1,28 @@\n-\n const Publisher = require(\"../models/Publisher\");\n \n+module.exports = async function subscriptionCheck(req, res, next) {\n+  try {\n+    const publisher = await Publisher.findOne({ userId: req.user.id });\n+    if (!publisher) {\n+      return res.status(404).json({ success: false, message: \"Publisher profile not found\" });\n+    }\n \n-module.exports = function checkSubscription(req, res, next) {\n-  if (req.user.role !== \"publisher\") return next();\n+    if (publisher.subscriptionStatus !== \"active\") {\n+      return res.status(403).json({\n+        success: false,\n+        message: \"Subscription not active. Please purchase a plan.\",\n+      });\n+    }\n \n-  const now = new Date();\n+    if (publisher.subscriptionExpiry && new Date(publisher.subscriptionExpiry) < new Date()) {\n+      return res.status(403).json({\n+        success: false,\n+        message: \"Subscription expired. Please renew.\",\n+      });\n+    }\n \n-  if (req.user.subscriptionStatus === \"suspended\") {\n-    return res.status(403).json({\n-      success: false,\n-      message: \"Subscription suspended\"\n-    });\n+    next();\n+  } catch (err) {\n+    return res.status(500).json({ success: false, message: err.message });\n   }\n-\n-  if (req.user.subscriptionExpiry && now > req.user.subscriptionExpiry) {\n-    return res.status(403).json({\n-      success: false,\n-      message: \"Subscription expired\"\n-    });\n-  }\n-\n-  next();\n };\n"
+                }
+            ],
+            "date": 1766930487685,
+            "name": "Commit-0",
+            "content": "module.exports = function checkSubscription(req, res, next) {\n  if (req.user.role !== \"publisher\") return next();\n\n  const now = new Date();\n\n  if (req.user.subscriptionStatus === \"suspended\") {\n    return res.status(403).json({\n      success: false,\n      message: \"Subscription suspended\"\n    });\n  }\n\n  if (req.user.subscriptionExpiry && now > req.user.subscriptionExpiry) {\n    return res.status(403).json({\n      success: false,\n      message: \"Subscription expired\"\n    });\n  }\n\n  next();\n};\n"
+        }
+    ]
+}

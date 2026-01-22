@@ -1,0 +1,42 @@
+{
+    "sourceFile": "src/controllers/adminPublisherTypeController.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 6,
+            "patches": [
+                {
+                    "date": 1766924289632,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766947603030,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,6 @@\n const PublisherType = require(\"../models/PublisherType\");\n+const escapeRegex = (str=\"\") => str.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\");\n \n exports.createPublisherType = async (req, res) => {\n   try {\n     const { name, description } = req.body;\n"
+                },
+                {
+                    "date": 1766947634790,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,29 +2,29 @@\n const escapeRegex = (str=\"\") => str.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\");\n \n exports.createPublisherType = async (req, res) => {\n   try {\n-    const { name, description } = req.body;\n+    let { name, description } = req.body;\n+    name = (name || \"\").trim();\n+    description = (description || \"\").trim();\n \n-    const exists = await PublisherType.findOne({ name });\n+    if (!name) {\n+      return res.status(400).json({ success:false, message:\"Name is required\" });\n+    }\n \n+    const exists = await PublisherType.findOne({\n+      name: { $regex: new RegExp(`^${escapeRegex(name)}$`, \"i\") }\n+    });\n+\n     if (exists) {\n-      return res.status(400).json({\n-        success: false,\n-        message: \"Type already exists\"\n-      });\n+      return res.status(409).json({ success:false, message:\"Type already exists\" });\n     }\n \n-    const type = await PublisherType.create({ name, description });\n+    const type = await PublisherType.create({ name, description, isActive: true });\n \n-    res.json({\n-      success: true,\n-      message: \"Publisher type created\",\n-      type\n-    });\n-\n+    res.status(201).json({ success:true, message:\"Publisher type created\", type });\n   } catch (err) {\n-    res.status(500).json({ success: false, message: err.message });\n+    res.status(500).json({ success:false, message: err.message });\n   }\n };\n \n \n"
+                },
+                {
+                    "date": 1766947659564,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,20 +29,19 @@\n \n \n exports.getPublisherTypes = async (req, res) => {\n   try {\n-    const types = await PublisherType.find({ isActive: true });\n-    res.json({ success: true, types });\n+    const types = await PublisherType.find({ isActive: true }).sort({ name: 1 });\n+    res.json({ success:true, types });\n   } catch (err) {\n-    res.status(500).json({ success: false, message: err.message });\n+    res.status(500).json({ success:false, message: err.message });\n   }\n };\n \n-\n exports.deactivatePublisherType = async (req, res) => {\n   try {\n     await PublisherType.findByIdAndUpdate(req.params.id, { isActive: false });\n-    res.json({ success: true, message: \"Publisher type deactivated\" });\n+    res.json({ success:true, message:\"Publisher type deactivated\" });\n   } catch (err) {\n-    res.status(500).json({ success: false, message: err.message });\n+    res.status(500).json({ success:false, message: err.message });\n   }\n };\n"
+                },
+                {
+                    "date": 1766949665018,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -44,4 +44,23 @@\n   } catch (err) {\n     res.status(500).json({ success:false, message: err.message });\n   }\n };\n+\n+\n+exports.getAllPublisherTypesAdmin = async (req, res) => {\n+  try {\n+    const q = (req.query.q || \"\").trim();\n+    const status = (req.query.status || \"all\").toLowerCase(); // all|active|inactive\n+\n+    const filter = {};\n+    if (q) filter.name = { $regex: new RegExp(q.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\"), \"i\") };\n+    if (status === \"active\") filter.isActive = true;\n+    if (status === \"inactive\") filter.isActive = false;\n+\n+    const types = await PublisherType.find(filter).sort({ createdAt: -1 });\n+    res.json({ success: true, types });\n+  } catch (err) {\n+    res.status(500).json({ success: false, message: err.message });\n+  }\n+};\n+\n"
+                },
+                {
+                    "date": 1766949734692,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,16 +27,16 @@\n   }\n };\n \n \n-exports.getPublisherTypes = async (req, res) => {\n-  try {\n-    const types = await PublisherType.find({ isActive: true }).sort({ name: 1 });\n-    res.json({ success:true, types });\n-  } catch (err) {\n-    res.status(500).json({ success:false, message: err.message });\n-  }\n-};\n+// exports.getPublisherTypes = async (req, res) => {\n+//   try {\n+//     const types = await PublisherType.find({ isActive: true }).sort({ name: 1 });\n+//     res.json({ success:true, types });\n+//   } catch (err) {\n+//     res.status(500).json({ success:false, message: err.message });\n+//   }\n+// };\n \n exports.deactivatePublisherType = async (req, res) => {\n   try {\n     await PublisherType.findByIdAndUpdate(req.params.id, { isActive: false });\n"
+                },
+                {
+                    "date": 1767017786565,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,16 +27,16 @@\n   }\n };\n \n \n-// exports.getPublisherTypes = async (req, res) => {\n-//   try {\n-//     const types = await PublisherType.find({ isActive: true }).sort({ name: 1 });\n-//     res.json({ success:true, types });\n-//   } catch (err) {\n-//     res.status(500).json({ success:false, message: err.message });\n-//   }\n-// };\n+exports.getPublisherTypes = async (req, res) => {\n+  try {\n+    const types = await PublisherType.find({ isActive: true }).sort({ name: 1 });\n+    res.json({ success:true, types });\n+  } catch (err) {\n+    res.status(500).json({ success:false, message: err.message });\n+  }\n+};\n \n exports.deactivatePublisherType = async (req, res) => {\n   try {\n     await PublisherType.findByIdAndUpdate(req.params.id, { isActive: false });\n"
+                }
+            ],
+            "date": 1766924289632,
+            "name": "Commit-0",
+            "content": "const PublisherType = require(\"../models/PublisherType\");\n\nexports.createPublisherType = async (req, res) => {\n  try {\n    const { name, description } = req.body;\n\n    const exists = await PublisherType.findOne({ name });\n\n    if (exists) {\n      return res.status(400).json({\n        success: false,\n        message: \"Type already exists\"\n      });\n    }\n\n    const type = await PublisherType.create({ name, description });\n\n    res.json({\n      success: true,\n      message: \"Publisher type created\",\n      type\n    });\n\n  } catch (err) {\n    res.status(500).json({ success: false, message: err.message });\n  }\n};\n\n\nexports.getPublisherTypes = async (req, res) => {\n  try {\n    const types = await PublisherType.find({ isActive: true });\n    res.json({ success: true, types });\n  } catch (err) {\n    res.status(500).json({ success: false, message: err.message });\n  }\n};\n\n\nexports.deactivatePublisherType = async (req, res) => {\n  try {\n    await PublisherType.findByIdAndUpdate(req.params.id, { isActive: false });\n    res.json({ success: true, message: \"Publisher type deactivated\" });\n  } catch (err) {\n    res.status(500).json({ success: false, message: err.message });\n  }\n};\n"
+        }
+    ]
+}

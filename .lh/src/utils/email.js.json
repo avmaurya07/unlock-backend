@@ -1,0 +1,26 @@
+{
+    "sourceFile": "src/utils/email.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 2,
+            "patches": [
+                {
+                    "date": 1766174134518,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766176460001,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n \n exports.sendEmailOTP = async (email, otp) => {\n   try {\n     await brevo.sendTransacEmail({\n-      sender: { email: \"noreply@yourdomain.com\", name: \"Unlock Startup\" },\n+      sender: { email: \"\", name: \"Unlock Startup\" },\n       to: [{ email }],\n       subject: \"Your OTP Verification Code\",\n       htmlContent: `<p>Your OTP for login is: <strong>${otp}</strong></p>`,\n     });\n"
+                },
+                {
+                    "date": 1766176477947,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -2,9 +2,9 @@\n \n exports.sendEmailOTP = async (email, otp) => {\n   try {\n     await brevo.sendTransacEmail({\n-      sender: { email: \"\", name: \"Unlock Startup\" },\n+      sender: { email: \"unlockstartup.business@gmail.com\", name: \"Unlock Startup\" },\n       to: [{ email }],\n       subject: \"Your OTP Verification Code\",\n       htmlContent: `<p>Your OTP for login is: <strong>${otp}</strong></p>`,\n     });\n"
+                }
+            ],
+            "date": 1766174134518,
+            "name": "Commit-0",
+            "content": "const brevo = require(\"../config/brevo\");\n\nexports.sendEmailOTP = async (email, otp) => {\n  try {\n    await brevo.sendTransacEmail({\n      sender: { email: \"noreply@yourdomain.com\", name: \"Unlock Startup\" },\n      to: [{ email }],\n      subject: \"Your OTP Verification Code\",\n      htmlContent: `<p>Your OTP for login is: <strong>${otp}</strong></p>`,\n    });\n\n    return true;\n  } catch (error) {\n    console.log(\"Brevo Error:\", error);\n    return false;\n  }\n};\n"
+        }
+    ]
+}

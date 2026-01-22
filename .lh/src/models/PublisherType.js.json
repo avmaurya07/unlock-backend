@@ -1,0 +1,22 @@
+{
+    "sourceFile": "src/models/PublisherType.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1765654982272,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766947009737,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,16 @@\n const mongoose = require(\"mongoose\");\n \n-const publisherTypeSchema = new mongoose.Schema({\n-  name: { type: String, required: true, unique: true },  \n-  description: { type: String },  // optional, admin can add meaning\n-  isActive: { type: Boolean, default: true },\n-}, { timestamps: true });\n+const publisherTypeSchema = new mongoose.Schema(\n+  {\n\\ No newline at end of file\n+    name: { type: String, required: true, trim: true },\n+    slug: { type: String, required: true, trim: true, lowercase: true, unique: true },\n+    description: { type: String, default: \"\" },\n+    isActive: { type: Boolean, default: true },\n \n-module.exports = mongoose.model(\"PublisherType\", publisherTypeSchema);\n+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: \"User\" },\n+    updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: \"User\" },\n+  },\n+  { timestamps: true }\n+);\n+\n+module.exports = mongoose.model(\"PublisherType\", publisherTypeSchema);\n"
+                }
+            ],
+            "date": 1765654982272,
+            "name": "Commit-0",
+            "content": "const mongoose = require(\"mongoose\");\n\nconst publisherTypeSchema = new mongoose.Schema({\n  name: { type: String, required: true, unique: true },  \n  description: { type: String },  // optional, admin can add meaning\n  isActive: { type: Boolean, default: true },\n}, { timestamps: true });\n\nmodule.exports = mongoose.model(\"PublisherType\", publisherTypeSchema);"
+        }
+    ]
+}

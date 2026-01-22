@@ -1,0 +1,42 @@
+{
+    "sourceFile": "src/routes/adminPublisherTypeRoutes.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 6,
+            "patches": [
+                {
+                    "date": 1766924272657,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766944849791,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middlewares/authMiddleware\");\n-const role = require(\"../middlewares/roleMiddleware\");\n+const auth = require(\"../middleware/authMiddleware\");\n+const role = require(\"../middleware/roleMiddleware\");\n const {\n   createPublisherType,\n   getPublisherTypes,\n   deactivatePublisherType\n"
+                },
+                {
+                    "date": 1766945971845,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -0,0 +1,17 @@\n+const express = require(\"express\");\n+const router = express.Router();\n+\n+const auth = require(\"../middleware/authMiddleware\");\n+const role = require(\"../middleware/roleMiddleware\");\n+const {\n+  createPublisherType,\n+  getPublisherTypes,\n+  deactivatePublisherType\n+} = require(\"../controllers/adminPublisherTypeController\");\n+\n+// Admin only\n+router.post(\"/create\", protect, role(\"admin\"), createPublisherType);\n+router.get(\"/\", protect, role(\"admin\"), getPublisherTypes);\n+router.patch(\"/deactivate/:id\", protect, role(\"admin\"), deactivatePublisherType);\n+\n+module.exports = router;\n"
+                },
+                {
+                    "date": 1766945976926,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middleware/authMiddleware\");\n+const { protect } = require(\"../middleware/authMiddleware\");\n const role = require(\"../middleware/roleMiddleware\");\n const {\n   createPublisherType,\n   getPublisherTypes,\n"
+                },
+                {
+                    "date": 1766949752707,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,8 +5,9 @@\n const role = require(\"../middleware/roleMiddleware\");\n const {\n   createPublisherType,\n   getPublisherTypes,\n+  \n   deactivatePublisherType\n } = require(\"../controllers/adminPublisherTypeController\");\n \n // Admin only\n@@ -14,21 +15,4 @@\n router.get(\"/\", protect, role(\"admin\"), getPublisherTypes);\n router.patch(\"/deactivate/:id\", protect, role(\"admin\"), deactivatePublisherType);\n \n module.exports = router;\n-const express = require(\"express\");\n-const router = express.Router();\n-\n-const auth = require(\"../middleware/authMiddleware\");\n-const role = require(\"../middleware/roleMiddleware\");\n-const {\n-  createPublisherType,\n-  getPublisherTypes,\n-  deactivatePublisherType\n-} = require(\"../controllers/adminPublisherTypeController\");\n-\n-// Admin only\n-router.post(\"/create\", auth, role(\"admin\"), createPublisherType);\n-router.get(\"/\", auth, role(\"admin\"), getPublisherTypes);\n-router.patch(\"/deactivate/:id\", auth, role(\"admin\"), deactivatePublisherType);\n-\n-module.exports = router;\n"
+                },
+                {
+                    "date": 1766949760185,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,14 +5,14 @@\n const role = require(\"../middleware/roleMiddleware\");\n const {\n   createPublisherType,\n   getPublisherTypes,\n-  \n+  getAllPublisherTypesAdmin,\n   deactivatePublisherType\n } = require(\"../controllers/adminPublisherTypeController\");\n \n // Admin only\n router.post(\"/create\", protect, role(\"admin\"), createPublisherType);\n-router.get(\"/\", protect, role(\"admin\"), getPublisherTypes);\n+// router.get(\"/\", protect, role(\"admin\"), getPublisherTypes);\n router.patch(\"/deactivate/:id\", protect, role(\"admin\"), deactivatePublisherType);\n \n module.exports = router;\n"
+                },
+                {
+                    "date": 1766949770759,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,7 +12,8 @@\n \n // Admin only\n router.post(\"/create\", protect, role(\"admin\"), createPublisherType);\n // router.get(\"/\", protect, role(\"admin\"), getPublisherTypes);\n+router.get(\"/\", protect, role(\"admin\"), getAllPublisherTypesAdmin);\n router.patch(\"/deactivate/:id\", protect, role(\"admin\"), deactivatePublisherType);\n \n module.exports = router;\n"
+                }
+            ],
+            "date": 1766924272657,
+            "name": "Commit-0",
+            "content": "const express = require(\"express\");\nconst router = express.Router();\n\nconst auth = require(\"../middlewares/authMiddleware\");\nconst role = require(\"../middlewares/roleMiddleware\");\nconst {\n  createPublisherType,\n  getPublisherTypes,\n  deactivatePublisherType\n} = require(\"../controllers/adminPublisherTypeController\");\n\n// Admin only\nrouter.post(\"/create\", auth, role(\"admin\"), createPublisherType);\nrouter.get(\"/\", auth, role(\"admin\"), getPublisherTypes);\nrouter.patch(\"/deactivate/:id\", auth, role(\"admin\"), deactivatePublisherType);\n\nmodule.exports = router;\n"
+        }
+    ]
+}

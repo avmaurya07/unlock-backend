@@ -1,0 +1,22 @@
+{
+    "sourceFile": "src/models/Publisher.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1765654999906,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766923621073,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,28 +1,29 @@\n const mongoose = require(\"mongoose\");\n \n const publisherSchema = new mongoose.Schema({\n-  userId: {\n-    type: mongoose.Schema.Types.ObjectId,\n-    ref: \"User\",\n-    required: true\n-  },\n+  userId: { type: mongoose.Schema.Types.ObjectId, ref: \"User\", required: true },\n \n   publisherType: {\n     type: mongoose.Schema.Types.ObjectId,\n     ref: \"PublisherType\",\n     required: true\n   },\n \n+  companyName: String,\n+  website: String,\n+  description: String,\n+  address: String,\n+\n   subscriptionStatus: {\n     type: String,\n     enum: [\"active\", \"expired\", \"suspended\"],\n-    default: \"expired\"\n+    default: \"active\"\n   },\n \n-  subscriptionExpiry: { type: Date },\n+  subscriptionExpiry: Date,\n \n-  servicePlanActive: { type: Boolean, default: false },\n+  servicePlanActive: { type: Boolean, default: false }\n \n }, { timestamps: true });\n \n module.exports = mongoose.model(\"Publisher\", publisherSchema);\n"
+                }
+            ],
+            "date": 1765654999906,
+            "name": "Commit-0",
+            "content": "const mongoose = require(\"mongoose\");\n\nconst publisherSchema = new mongoose.Schema({\n  userId: {\n    type: mongoose.Schema.Types.ObjectId,\n    ref: \"User\",\n    required: true\n  },\n\n  publisherType: {\n    type: mongoose.Schema.Types.ObjectId,\n    ref: \"PublisherType\",\n    required: true\n  },\n\n  subscriptionStatus: {\n    type: String,\n    enum: [\"active\", \"expired\", \"suspended\"],\n    default: \"expired\"\n  },\n\n  subscriptionExpiry: { type: Date },\n\n  servicePlanActive: { type: Boolean, default: false },\n\n}, { timestamps: true });\n\nmodule.exports = mongoose.model(\"Publisher\", publisherSchema);\n"
+        }
+    ]
+}

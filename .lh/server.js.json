@@ -1,0 +1,70 @@
+{
+    "sourceFile": "server.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 13,
+            "patches": [
+                {
+                    "date": 1765739216806,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1765739380370,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,4 +8,5 @@\n \n app.listen(PORT, () => {\n   console.log(`Server running on port ${PORT}`);\n });\n+₹\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1765739386964,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,5 +8,5 @@\n \n app.listen(PORT, () => {\n   console.log(`Server running on port ${PORT}`);\n });\n-₹\n\\ No newline at end of file\n+§\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1765739392388,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,5 +8,4 @@\n \n app.listen(PORT, () => {\n   console.log(`Server running on port ${PORT}`);\n });\n-§\n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1766923411534,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -8,4 +8,7 @@\n \n app.listen(PORT, () => {\n   console.log(`Server running on port ${PORT}`);\n });\n+\n+\n+app.use(\"/api/publisher\", require(\"./routes/publisherRoutes\"));\n"
+                },
+                {
+                    "date": 1766930734029,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,4 +11,5 @@\n });\n \n \n app.use(\"/api/publisher\", require(\"./routes/publisherRoutes\"));\n+app.use(\"/api/listings\", require(\"./routes/listingRoutes\"));\n"
+                },
+                {
+                    "date": 1766930847023,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -12,4 +12,5 @@\n \n \n app.use(\"/api/publisher\", require(\"./routes/publisherRoutes\"));\n app.use(\"/api/listings\", require(\"./routes/listingRoutes\"));\n+app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n"
+                },
+                {
+                    "date": 1766931116476,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -13,4 +13,6 @@\n \n app.use(\"/api/publisher\", require(\"./routes/publisherRoutes\"));\n app.use(\"/api/listings\", require(\"./routes/listingRoutes\"));\n app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n+\n+app.use(\"/api/publisher/dashboard\", require(\"./routes/publisherDashboardRoutes\"));\n"
+                },
+                {
+                    "date": 1766931530621,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -15,4 +15,6 @@\n app.use(\"/api/listings\", require(\"./routes/listingRoutes\"));\n app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n \n app.use(\"/api/publisher/dashboard\", require(\"./routes/publisherDashboardRoutes\"));\n+\n+app.use(\"/api/uploads\", require(\"./routes/uploadRoutes\"));\n"
+                },
+                {
+                    "date": 1766933391083,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -17,4 +17,5 @@\n \n app.use(\"/api/publisher/dashboard\", require(\"./routes/publisherDashboardRoutes\"));\n \n app.use(\"/api/uploads\", require(\"./routes/uploadRoutes\"));\n+app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n"
+                },
+                {
+                    "date": 1766933680644,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -18,4 +18,5 @@\n app.use(\"/api/publisher/dashboard\", require(\"./routes/publisherDashboardRoutes\"));\n \n app.use(\"/api/uploads\", require(\"./routes/uploadRoutes\"));\n app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n+app.use(\"/api/admin/dashboard\", require(\"./routes/adminDashboardRoutes\"));\n"
+                },
+                {
+                    "date": 1766942771197,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n   console.log(`Server running on port ${PORT}`);\n });\n \n \n-app.use(\"/api/publisher\", require(\"./routes/publisherRoutes\"));\n+// app.use(\"/api/publisher\", require(\"./routes/publisherRoutes\"));\n app.use(\"/api/listings\", require(\"./routes/listingRoutes\"));\n app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n \n app.use(\"/api/publisher/dashboard\", require(\"./routes/publisherDashboardRoutes\"));\n"
+                },
+                {
+                    "date": 1766942782430,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -10,9 +10,9 @@\n   console.log(`Server running on port ${PORT}`);\n });\n \n \n-// app.use(\"/api/publisher\", require(\"./routes/publisherRoutes\"));\n+app.use(\"/api/publisher\", require(\"./routes/publisherRoutes\"));\n app.use(\"/api/listings\", require(\"./routes/listingRoutes\"));\n app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n \n app.use(\"/api/publisher/dashboard\", require(\"./routes/publisherDashboardRoutes\"));\n"
+                },
+                {
+                    "date": 1766944230238,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -3,20 +3,8 @@\n const app = require(\"./src/app\");\n \n const PORT = process.env.PORT || 5000;\n \n-connectDB();\n-\n-app.listen(PORT, () => {\n-  console.log(`Server running on port ${PORT}`);\n-});\n-\n-\n-app.use(\"/api/publisher\", require(\"./routes/publisherRoutes\"));\n-app.use(\"/api/listings\", require(\"./routes/listingRoutes\"));\n-app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n-\n-app.use(\"/api/publisher/dashboard\", require(\"./routes/publisherDashboardRoutes\"));\n-\n-app.use(\"/api/uploads\", require(\"./routes/uploadRoutes\"));\n-app.use(\"/api/admin/listings\", require(\"./routes/adminListingRoutes\"));\n-app.use(\"/api/admin/dashboard\", require(\"./routes/adminDashboardRoutes\"));\n+(async () => {\n+  await connectDB();\n+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));\n+})();\n"
+                }
+            ],
+            "date": 1765739216806,
+            "name": "Commit-0",
+            "content": "require(\"dotenv\").config();\nconst connectDB = require(\"./src/config/db\");\nconst app = require(\"./src/app\");\n\nconst PORT = process.env.PORT || 5000;\n\nconnectDB();\n\napp.listen(PORT, () => {\n  console.log(`Server running on port ${PORT}`);\n});\n"
+        }
+    ]
+}

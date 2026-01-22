@@ -1,0 +1,34 @@
+{
+    "sourceFile": "src/routes/adminListingRoutes.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 4,
+            "patches": [
+                {
+                    "date": 1766930816944,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766933364798,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -4,14 +4,21 @@\n const auth = require(\"../middlewares/authMiddleware\");\n const role = require(\"../middlewares/roleMiddleware\");\n \n const {\n-  getPendingListings,\n-  approveListing,\n-  rejectListing\n+  adminListListings,\n+  adminGetListingById,\n+  adminApproveListing,\n+  adminRejectListing,\n } = require(\"../controllers/adminListingController\");\n \n-router.get(\"/pending\", auth, role(\"admin\"), getPendingListings);\n-router.post(\"/approve/:id\", auth, role(\"admin\"), approveListing);\n-router.post(\"/reject/:id\", auth, role(\"admin\"), rejectListing);\n+// List with filters + pagination\n+router.get(\"/\", auth, role(\"admin\"), adminListListings);\n \n+// Single listing detail (for review screen)\n+router.get(\"/:id\", auth, role(\"admin\"), adminGetListingById);\n+\n+// Approve / Reject\n+router.patch(\"/:id/approve\", auth, role(\"admin\"), adminApproveListing);\n+router.patch(\"/:id/reject\", auth, role(\"admin\"), adminRejectListing);\n+\n module.exports = router;\n"
+                },
+                {
+                    "date": 1766944843893,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middlewares/authMiddleware\");\n-const role = require(\"../middlewares/roleMiddleware\");\n+const auth = require(\"../middleware/authMiddleware\");\n+const role = require(\"../middleware/roleMiddleware\");\n \n const {\n   adminListListings,\n   adminGetListingById,\n"
+                },
+                {
+                    "date": 1766945942670,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middleware/authMiddleware\");\n+const { protect } = require(\"../middleware/authMiddleware\");\n const role = require(\"../middleware/roleMiddleware\");\n \n const {\n   adminListListings,\n"
+                },
+                {
+                    "date": 1766945952655,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -11,14 +11,14 @@\n   adminRejectListing,\n } = require(\"../controllers/adminListingController\");\n \n // List with filters + pagination\n-router.get(\"/\", auth, role(\"admin\"), adminListListings);\n+router.get(\"/\", protect, role(\"admin\"), adminListListings);\n \n // Single listing detail (for review screen)\n-router.get(\"/:id\", auth, role(\"admin\"), adminGetListingById);\n+router.get(\"/:id\", protect, role(\"admin\"), adminGetListingById);\n \n // Approve / Reject\n-router.patch(\"/:id/approve\", auth, role(\"admin\"), adminApproveListing);\n-router.patch(\"/:id/reject\", auth, role(\"admin\"), adminRejectListing);\n+router.patch(\"/:id/approve\", protect, role(\"admin\"), adminApproveListing);\n+router.patch(\"/:id/reject\", protect, role(\"admin\"), adminRejectListing);\n \n module.exports = router;\n"
+                }
+            ],
+            "date": 1766930816944,
+            "name": "Commit-0",
+            "content": "const express = require(\"express\");\nconst router = express.Router();\n\nconst auth = require(\"../middlewares/authMiddleware\");\nconst role = require(\"../middlewares/roleMiddleware\");\n\nconst {\n  getPendingListings,\n  approveListing,\n  rejectListing\n} = require(\"../controllers/adminListingController\");\n\nrouter.get(\"/pending\", auth, role(\"admin\"), getPendingListings);\nrouter.post(\"/approve/:id\", auth, role(\"admin\"), approveListing);\nrouter.post(\"/reject/:id\", auth, role(\"admin\"), rejectListing);\n\nmodule.exports = router;\n"
+        }
+    ]
+}

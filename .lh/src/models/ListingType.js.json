@@ -1,0 +1,22 @@
+{
+    "sourceFile": "src/models/ListingType.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 1,
+            "patches": [
+                {
+                    "date": 1765738300021,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766930659861,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,15 @@\n const mongoose = require(\"mongoose\");\n \n const listingTypeSchema = new mongoose.Schema({\n-  name: { type: String, required: true, unique: true },  \n-  description: { type: String }, \n-  isActive: { type: Boolean, default: true },\n+  name: {\n+    type: String,\n+    required: true,\n+    unique: true\n+  },\n+\n+  description: String,\n+  isActive: { type: Boolean, default: true }\n+\n }, { timestamps: true });\n \n module.exports = mongoose.model(\"ListingType\", listingTypeSchema);\n"
+                }
+            ],
+            "date": 1765738300021,
+            "name": "Commit-0",
+            "content": "const mongoose = require(\"mongoose\");\n\nconst listingTypeSchema = new mongoose.Schema({\n  name: { type: String, required: true, unique: true },  \n  description: { type: String }, \n  isActive: { type: Boolean, default: true },\n}, { timestamps: true });\n\nmodule.exports = mongoose.model(\"ListingType\", listingTypeSchema);\n"
+        }
+    ]
+}

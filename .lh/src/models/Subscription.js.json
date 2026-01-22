@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/models/Subscription.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1765738417005,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766928763303,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -5,8 +5,13 @@\n     price: { type: Number, required: true },\n   \n     startDate: { type: Date, default: Date.now },\n     expiryDate: { type: Date, required: true },\n+\n+    isActive: {\n+    type: Boolean,\n+    default: true\n+  }\n   \n     paymentId: String, // Razorpay payment reference\n   }, { timestamps: true });\n   \n"
+                },
+                {
+                    "date": 1766928807934,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,5 +1,5 @@\n-const subscriptionSchema = new mongoose.Schema({\n+const subscriptionPlanSchema = new mongoose.Schema({\n     publisherId: { type: mongoose.Schema.Types.ObjectId, ref: \"Publisher\", required: true },\n   \n     plan: { type: String, enum: [\"3m\", \"6m\", \"9m\"], required: true },\n     price: { type: Number, required: true },\n@@ -9,11 +9,11 @@\n \n     isActive: {\n     type: Boolean,\n     default: true\n-  }\n+  },\n   \n     paymentId: String, // Razorpay payment reference\n   }, { timestamps: true });\n   \n-  module.exports = mongoose.model(\"Subscription\", subscriptionSchema);\n+  module.exports = mongoose.model(\"Subscription\", subscriptionPlanSchema);\n   \n\\ No newline at end of file\n"
+                },
+                {
+                    "date": 1766928823388,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,6 +14,6 @@\n   \n     paymentId: String, // Razorpay payment reference\n   }, { timestamps: true });\n   \n-  module.exports = mongoose.model(\"Subscription\", subscriptionPlanSchema);\n+  module.exports = mongoose.model(\"SubscriptionPlan\", subscriptionPlanSchema);\n   \n\\ No newline at end of file\n"
+                }
+            ],
+            "date": 1765738417004,
+            "name": "Commit-0",
+            "content": "const subscriptionSchema = new mongoose.Schema({\n    publisherId: { type: mongoose.Schema.Types.ObjectId, ref: \"Publisher\", required: true },\n  \n    plan: { type: String, enum: [\"3m\", \"6m\", \"9m\"], required: true },\n    price: { type: Number, required: true },\n  \n    startDate: { type: Date, default: Date.now },\n    expiryDate: { type: Date, required: true },\n  \n    paymentId: String, // Razorpay payment reference\n  }, { timestamps: true });\n  \n  module.exports = mongoose.model(\"Subscription\", subscriptionSchema);\n  "
+        }
+    ]
+}

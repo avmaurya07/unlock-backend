@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/config/redis.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1765739184993,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1765739184993,
+            "name": "Commit-0",
+            "content": "const { createClient } = require(\"redis\");\n\nconst redis = createClient({\n  url: process.env.REDIS_URL,\n});\n\nredis.on(\"error\", (err) => console.log(\"Redis Error:\", err));\n\nredis.connect();\n\nmodule.exports = redis;\n"
+        }
+    ]
+}

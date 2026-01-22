@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/routes/adminSubscriptionRoutes.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1766928884630,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766944856907,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middlewares/authMiddleware\");\n-const role = require(\"../middlewares/roleMiddleware\");\n+const auth = require(\"../middleware/authMiddleware\");\n+const role = require(\"../middleware/roleMiddleware\");\n \n const {\n   createOrUpdateSubscriptionPlan,\n   getSubscriptionPlans,\n"
+                },
+                {
+                    "date": 1766946005350,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middleware/authMiddleware\");\n+const { protect } = require(\"../middleware/authMiddleware\");\n const role = require(\"../middleware/roleMiddleware\");\n \n const {\n   createOrUpdateSubscriptionPlan,\n"
+                },
+                {
+                    "date": 1766946019337,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,14 +14,14 @@\n   extendPublisherSubscription,\n   suspendPublisherSubscription\n } = require(\"../controllers/adminSubscriptionController\");\n \n-router.post(\"/plan\", auth, role(\"admin\"), createOrUpdateSubscriptionPlan);\n-router.get(\"/plan\", auth, role(\"admin\"), getSubscriptionPlans);\n+router.post(\"/plan\", protect, role(\"admin\"), createOrUpdateSubscriptionPlan);\n+router.get(\"/plan\", protect, role(\"admin\"), getSubscriptionPlans);\n \n-router.post(\"/service\", auth, role(\"admin\"), createOrUpdateServicePlan);\n-router.get(\"/service\", auth, role(\"admin\"), getServicePlan);\n+router.post(\"/service\", protect, role(\"admin\"), createOrUpdateServicePlan);\n+router.get(\"/service\", protect, role(\"admin\"), getServicePlan);\n \n-router.post(\"/extend/:publisherId\", auth, role(\"admin\"), extendPublisherSubscription);\n-router.post(\"/suspend/:publisherId\", auth, role(\"admin\"), suspendPublisherSubscription);\n+router.post(\"/extend/:publisherId\", protect, role(\"admin\"), extendPublisherSubscription);\n+router.post(\"/suspend/:publisherId\", protect, role(\"admin\"), suspendPublisherSubscription);\n \n module.exports = router;\n"
+                }
+            ],
+            "date": 1766928884630,
+            "name": "Commit-0",
+            "content": "const express = require(\"express\");\nconst router = express.Router();\n\nconst auth = require(\"../middlewares/authMiddleware\");\nconst role = require(\"../middlewares/roleMiddleware\");\n\nconst {\n  createOrUpdateSubscriptionPlan,\n  getSubscriptionPlans,\n\n  createOrUpdateServicePlan,\n  getServicePlan,\n\n  extendPublisherSubscription,\n  suspendPublisherSubscription\n} = require(\"../controllers/adminSubscriptionController\");\n\nrouter.post(\"/plan\", auth, role(\"admin\"), createOrUpdateSubscriptionPlan);\nrouter.get(\"/plan\", auth, role(\"admin\"), getSubscriptionPlans);\n\nrouter.post(\"/service\", auth, role(\"admin\"), createOrUpdateServicePlan);\nrouter.get(\"/service\", auth, role(\"admin\"), getServicePlan);\n\nrouter.post(\"/extend/:publisherId\", auth, role(\"admin\"), extendPublisherSubscription);\nrouter.post(\"/suspend/:publisherId\", auth, role(\"admin\"), suspendPublisherSubscription);\n\nmodule.exports = router;\n"
+        }
+    ]
+}

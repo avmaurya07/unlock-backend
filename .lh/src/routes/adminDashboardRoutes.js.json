@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/routes/adminDashboardRoutes.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1766933670761,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766944837552,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,9 +1,9 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middlewares/authMiddleware\");\n-const role = require(\"../middlewares/roleMiddleware\");\n+const auth = require(\"../middleware/authMiddleware\");\n+const role = require(\"../middleware/roleMiddleware\");\n \n const {\n   getAdminSummaryStats,\n   getListingsByTypeStats,\n"
+                },
+                {
+                    "date": 1766945915714,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middleware/authMiddleware\");\n+const { protect } = require(\"../middleware/authMiddleware\");\n const role = require(\"../middleware/roleMiddleware\");\n \n const {\n   getAdminSummaryStats,\n"
+                },
+                {
+                    "date": 1766945931420,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -9,9 +9,9 @@\n   getListingsByTypeStats,\n   getListingsTrendStats\n } = require(\"../controllers/adminDashboardController\");\n \n-router.get(\"/summary\", auth, role(\"admin\"), getAdminSummaryStats);\n+router.get(\"/summary\", protect, role(\"admin\"), getAdminSummaryStats);\n router.get(\"/listings-by-type\", auth, role(\"admin\"), getListingsByTypeStats);\n router.get(\"/listings-trends\", auth, role(\"admin\"), getListingsTrendStats);\n \n module.exports = router;\n"
+                }
+            ],
+            "date": 1766933670760,
+            "name": "Commit-0",
+            "content": "const express = require(\"express\");\nconst router = express.Router();\n\nconst auth = require(\"../middlewares/authMiddleware\");\nconst role = require(\"../middlewares/roleMiddleware\");\n\nconst {\n  getAdminSummaryStats,\n  getListingsByTypeStats,\n  getListingsTrendStats\n} = require(\"../controllers/adminDashboardController\");\n\nrouter.get(\"/summary\", auth, role(\"admin\"), getAdminSummaryStats);\nrouter.get(\"/listings-by-type\", auth, role(\"admin\"), getListingsByTypeStats);\nrouter.get(\"/listings-trends\", auth, role(\"admin\"), getListingsTrendStats);\n\nmodule.exports = router;\n"
+        }
+    ]
+}

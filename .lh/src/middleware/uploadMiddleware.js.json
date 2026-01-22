@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/middleware/uploadMiddleware.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1766931459183,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1766931459183,
+            "name": "Commit-0",
+            "content": "const multer = require(\"multer\");\n\n// Memory storage (best for servers like DigitalOcean)\nconst storage = multer.memoryStorage();\n\nconst fileFilter = (req, file, cb) => {\n  // Allow images + pdf (customize if needed)\n  const allowed = [\"image/jpeg\", \"image/png\", \"image/webp\", \"application/pdf\"];\n\n  if (!allowed.includes(file.mimetype)) {\n    return cb(new Error(\"Only JPG, PNG, WEBP, PDF allowed\"), false);\n  }\n  cb(null, true);\n};\n\nconst upload = multer({\n  storage,\n  fileFilter,\n  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per file\n});\n\nmodule.exports = upload;\n"
+        }
+    ]
+}

@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/models/Payment.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1765738432011,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1765738432011,
+            "name": "Commit-0",
+            "content": "const paymentSchema = new mongoose.Schema({\n    publisherId: { type: mongoose.Schema.Types.ObjectId, ref: \"Publisher\" },\n  \n    razorpayOrderId: String,\n    razorpayPaymentId: String,\n    razorpaySignature: String,\n  \n    amount: Number,\n    status: { type: String, enum: [\"success\", \"failed\"], default: \"success\" }\n  \n  }, { timestamps: true });\n  \n  module.exports = mongoose.model(\"Payment\", paymentSchema);\n  "
+        }
+    ]
+}

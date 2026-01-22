@@ -1,0 +1,38 @@
+{
+    "sourceFile": "src/middleware/authMiddleware.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 5,
+            "patches": [
+                {
+                    "date": 1766174303320,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766923064635,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,15 +1,23 @@\n const jwt = require(\"jsonwebtoken\");\n \n-module.exports = (req, res, next) => {\n+module.exports = function auth(req, res, next) {\n   const token = req.headers.authorization?.split(\" \")[1];\n \n-  if (!token) return res.status(401).json({ message: \"Unauthorized\" });\n+  if (!token) {\n+    return res.status(401).json({\n+      success: false,\n+      message: \"No token provided\",\n+    });\n+  }\n \n   try {\n     const decoded = jwt.verify(token, process.env.JWT_SECRET);\n-    req.user = decoded;  // { id, role }\n+    req.user = decoded; // { id, email, role }\n     next();\n-  } catch {\n-    res.status(401).json({ message: \"Invalid token\" });\n+  } catch (err) {\n+    return res.status(401).json({\n+      success: false,\n+      message: \"Invalid or expired token\",\n+    });\n   }\n };\n"
+                },
+                {
+                    "date": 1766944781304,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,23 +1,32 @@\n const jwt = require(\"jsonwebtoken\");\n+const User = require(\"../models/User\"); // adjust if your model name differs\n \n-module.exports = function auth(req, res, next) {\n-  const token = req.headers.authorization?.split(\" \")[1];\n+const protect = async (req, res, next) => {\n+  try {\n+    const header = req.headers.authorization || \"\";\n+    const token = header.startsWith(\"Bearer \") ? header.split(\" \")[1] : null;\n \n-  if (!token) {\n-    return res.status(401).json({\n-      success: false,\n-      message: \"No token provided\",\n-    });\n-  }\n+    if (!token) {\n+      return res.status(401).json({ message: \"No token. Unauthorized.\" });\n+    }\n \n-  try {\n     const decoded = jwt.verify(token, process.env.JWT_SECRET);\n-    req.user = decoded; // { id, email, role }\n+\n+    const user = await User.findById(decoded.id).select(\"-password\");\n+    if (!user) return res.status(401).json({ message: \"User not found.\" });\n+\n+    req.user = user;\n     next();\n   } catch (err) {\n-    return res.status(401).json({\n-      success: false,\n-      message: \"Invalid or expired token\",\n-    });\n+    return res.status(401).json({ message: \"Invalid/Expired token.\" });\n   }\n };\n+\n+const isAdmin = (req, res, next) => {\n+  if (req.user?.role !== \"admin\") {\n+    return res.status(403).json({ message: \"Admin only.\" });\n+  }\n+  next();\n+};\n+\n+module.exports = { protect, isAdmin };\n"
+                },
+                {
+                    "date": 1766945517479,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,25 +1,23 @@\n const jwt = require(\"jsonwebtoken\");\n const User = require(\"../models/User\"); // adjust if your model name differs\n \n-const protect = async (req, res, next) => {\n+exports.protect = async (req, res, next) => {\n   try {\n     const header = req.headers.authorization || \"\";\n     const token = header.startsWith(\"Bearer \") ? header.split(\" \")[1] : null;\n \n-    if (!token) {\n-      return res.status(401).json({ message: \"No token. Unauthorized.\" });\n-    }\n+    if (!token) return res.status(401).json({ message: \"No token\" });\n \n     const decoded = jwt.verify(token, process.env.JWT_SECRET);\n+    const user = await User.findById(decoded.id);\n \n-    const user = await User.findById(decoded.id).select(\"-password\");\n-    if (!user) return res.status(401).json({ message: \"User not found.\" });\n+    if (!user) return res.status(401).json({ message: \"User not found\" });\n \n-    req.user = user;\n+    req.user = { id: user._id.toString(), role: user.role }; // ✅ matches your controller + roleMiddleware\n     next();\n-  } catch (err) {\n-    return res.status(401).json({ message: \"Invalid/Expired token.\" });\n+  } catch (e) {\n+    return res.status(401).json({ message: \"Invalid token\" });\n   }\n };\n \n const isAdmin = (req, res, next) => {\n"
+                },
+                {
+                    "date": 1766946224045,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -26,5 +26,5 @@\n   }\n   next();\n };\n \n-module.exports = { protect, isAdmin };\n+module.exports = { isAdmin };\n"
+                },
+                {
+                    "date": 1766946659337,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n const jwt = require(\"jsonwebtoken\");\n-const User = require(\"../models/User\"); // adjust if your model name differs\n+const User = require(\"../models/User\");\n \n-exports.protect = async (req, res, next) => {\n+const protect = async (req, res, next) => {\n   try {\n     const header = req.headers.authorization || \"\";\n     const token = header.startsWith(\"Bearer \") ? header.split(\" \")[1] : null;\n \n@@ -12,9 +12,9 @@\n     const user = await User.findById(decoded.id);\n \n     if (!user) return res.status(401).json({ message: \"User not found\" });\n \n-    req.user = { id: user._id.toString(), role: user.role }; // ✅ matches your controller + roleMiddleware\n+    req.user = { id: user._id.toString(), role: user.role };\n     next();\n   } catch (e) {\n     return res.status(401).json({ message: \"Invalid token\" });\n   }\n@@ -26,5 +26,5 @@\n   }\n   next();\n };\n \n-module.exports = { isAdmin };\n+module.exports = { protect, isAdmin };\n"
+                }
+            ],
+            "date": 1766174303320,
+            "name": "Commit-0",
+            "content": "const jwt = require(\"jsonwebtoken\");\n\nmodule.exports = (req, res, next) => {\n  const token = req.headers.authorization?.split(\" \")[1];\n\n  if (!token) return res.status(401).json({ message: \"Unauthorized\" });\n\n  try {\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    req.user = decoded;  // { id, role }\n    next();\n  } catch {\n    res.status(401).json({ message: \"Invalid token\" });\n  }\n};\n"
+        }
+    ]
+}

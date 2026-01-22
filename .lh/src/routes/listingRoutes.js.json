@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/routes/listingRoutes.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1766930721448,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766944870934,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,10 +1,10 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middlewares/authMiddleware\");\n-const role = require(\"../middlewares/roleMiddleware\");\n-const subscriptionCheck = require(\"../middlewares/subscriptionCheck\");\n+const auth = require(\"../middleware/authMiddleware\");\n+const role = require(\"../middleware/roleMiddleware\");\n+const subscriptionCheck = require(\"../middleware/subscriptionCheck\");\n \n const {\n   createListing,\n   updateListing,\n"
+                },
+                {
+                    "date": 1766946036856,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,8 +1,8 @@\n const express = require(\"express\");\n const router = express.Router();\n \n-const auth = require(\"../middleware/authMiddleware\");\n+const {protect} = require(\"../middleware/authMiddleware\");\n const role = require(\"../middleware/roleMiddleware\");\n const subscriptionCheck = require(\"../middleware/subscriptionCheck\");\n \n const {\n"
+                },
+                {
+                    "date": 1766946044891,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -14,12 +14,12 @@\n   getListingById\n } = require(\"../controllers/listingController\");\n \n // Publisher actions\n-router.post(\"/\", auth, role(\"publisher\"), subscriptionCheck, createListing);\n-router.patch(\"/:id\", auth, role(\"publisher\"), subscriptionCheck, updateListing);\n-router.delete(\"/:id\", auth, role(\"publisher\"), subscriptionCheck, deleteListing);\n-router.get(\"/mine\", auth, role(\"publisher\"), getMyListings);\n+router.post(\"/\", protect, role(\"publisher\"), subscriptionCheck, createListing);\n+router.patch(\"/:id\", protect, role(\"publisher\"), subscriptionCheck, updateListing);\n+router.delete(\"/:id\", protect, role(\"publisher\"), subscriptionCheck, deleteListing);\n+router.get(\"/mine\", protect, role(\"publisher\"), getMyListings);\n \n // Public\n router.get(\"/public\", getPublicListings);\n router.get(\"/:id\", getListingById);\n"
+                }
+            ],
+            "date": 1766930721448,
+            "name": "Commit-0",
+            "content": "const express = require(\"express\");\nconst router = express.Router();\n\nconst auth = require(\"../middlewares/authMiddleware\");\nconst role = require(\"../middlewares/roleMiddleware\");\nconst subscriptionCheck = require(\"../middlewares/subscriptionCheck\");\n\nconst {\n  createListing,\n  updateListing,\n  deleteListing,\n  getMyListings,\n  getPublicListings,\n  getListingById\n} = require(\"../controllers/listingController\");\n\n// Publisher actions\nrouter.post(\"/\", auth, role(\"publisher\"), subscriptionCheck, createListing);\nrouter.patch(\"/:id\", auth, role(\"publisher\"), subscriptionCheck, updateListing);\nrouter.delete(\"/:id\", auth, role(\"publisher\"), subscriptionCheck, deleteListing);\nrouter.get(\"/mine\", auth, role(\"publisher\"), getMyListings);\n\n// Public\nrouter.get(\"/public\", getPublicListings);\nrouter.get(\"/:id\", getListingById);\n\nmodule.exports = router;\n"
+        }
+    ]
+}

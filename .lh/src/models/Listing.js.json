@@ -1,0 +1,30 @@
+{
+    "sourceFile": "src/models/Listing.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 3,
+            "patches": [
+                {
+                    "date": 1765738321294,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                },
+                {
+                    "date": 1766930700883,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -1,11 +1,12 @@\n const mongoose = require(\"mongoose\");\n \n const listingSchema = new mongoose.Schema({\n-  publisherId: {\n-    type: mongoose.Schema.Types.ObjectId,\n-    ref: \"Publisher\",\n-    required: true\n+\n+  publisherId: { \n+    type: mongoose.Schema.Types.ObjectId, \n+    ref: \"Publisher\", \n+    required: true \n   },\n \n   type: {\n     type: mongoose.Schema.Types.ObjectId,\n@@ -25,9 +26,10 @@\n   location: String,\n   deadline: Date,\n   startDate: Date,\n   endDate: Date,\n-  attachments: [String],\n \n+  attachments: [String], // files or image URLs\n+\n }, { timestamps: true });\n \n module.exports = mongoose.model(\"Listing\", listingSchema);\n"
+                },
+                {
+                    "date": 1766931571830,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -27,9 +27,15 @@\n   deadline: Date,\n   startDate: Date,\n   endDate: Date,\n \n-  attachments: [String], // files or image URLs\n+  attachments: [\n+  {\n+    url: String,\n+    publicId: String,\n+    resourceType: String\n+  }\n+],\n \n }, { timestamps: true });\n \n module.exports = mongoose.model(\"Listing\", listingSchema);\n"
+                },
+                {
+                    "date": 1766932745082,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n@@ -29,11 +29,11 @@\n   endDate: Date,\n \n   attachments: [\n   {\n-    url: String,\n-    publicId: String,\n-    resourceType: String\n+    url: { type: String, required: true },\n+    publicId: { type: String, required: true },\n+    resourceType: { type: String, default: \"image\" } // image/raw/video\n   }\n ],\n \n }, { timestamps: true });\n"
+                }
+            ],
+            "date": 1765738321294,
+            "name": "Commit-0",
+            "content": "const mongoose = require(\"mongoose\");\n\nconst listingSchema = new mongoose.Schema({\n  publisherId: {\n    type: mongoose.Schema.Types.ObjectId,\n    ref: \"Publisher\",\n    required: true\n  },\n\n  type: {\n    type: mongoose.Schema.Types.ObjectId,\n    ref: \"ListingType\",\n    required: true\n  },\n\n  title: { type: String, required: true },\n  description: { type: String, required: true },\n\n  status: {\n    type: String,\n    enum: [\"pending\", \"approved\", \"rejected\"],\n    default: \"pending\"\n  },\n\n  location: String,\n  deadline: Date,\n  startDate: Date,\n  endDate: Date,\n  attachments: [String],\n\n}, { timestamps: true });\n\nmodule.exports = mongoose.model(\"Listing\", listingSchema);\n"
+        }
+    ]
+}

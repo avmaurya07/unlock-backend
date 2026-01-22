@@ -1,0 +1,18 @@
+{
+    "sourceFile": "src/controllers/authController.js",
+    "activeCommit": 0,
+    "commits": [
+        {
+            "activePatchIndex": 0,
+            "patches": [
+                {
+                    "date": 1766174225769,
+                    "content": "Index: \n===================================================================\n--- \n+++ \n"
+                }
+            ],
+            "date": 1766174225769,
+            "name": "Commit-0",
+            "content": "const User = require(\"../models/User\");\nconst Publisher = require(\"../models/Publisher\");\nconst redis = require(\"../config/redis\");\nconst generateOTP = require(\"../utils/generateOTP\");\nconst { sendEmailOTP } = require(\"../utils/email\");\nconst { generateToken } = require(\"../utils/jwt\");\n\n// --------------------------------------\n// SEND OTP\n// --------------------------------------\nexports.sendOtp = async (req, res) => {\n  try {\n    const { email } = req.body;\n\n    if (!email) return res.status(400).json({ message: \"Email required\" });\n\n    const otp = generateOTP();\n\n    // Save OTP in Redis for 5 min\n    await redis.set(`otp:${email}`, otp, { EX: 300 });\n\n    const emailSent = await sendEmailOTP(email, otp);\n    if (!emailSent)\n      return res.status(500).json({ message: \"Failed to send OTP\" });\n\n    res.json({ success: true, message: \"OTP sent to email\" });\n  } catch (err) {\n    res.status(500).json({ message: err.message });\n  }\n};\n\n// --------------------------------------\n// VERIFY OTP & LOGIN / REGISTER\n// --------------------------------------\nexports.verifyOtp = async (req, res) => {\n  try {\n    const { email, otp, role } = req.body;\n\n    const storedOtp = await redis.get(`otp:${email}`);\n\n    if (!storedOtp) return res.status(400).json({ message: \"OTP expired\" });\n\n    if (storedOtp !== otp)\n      return res.status(400).json({ message: \"Invalid OTP\" });\n\n    let user = await User.findOne({ email });\n\n    // If user does not exist → create new one\n    if (!user) {\n      user = await User.create({\n        email,\n        role: role || \"user\",\n        isVerified: true,\n      });\n\n      // If role is publisher → create empty publisher profile\n      if (role === \"publisher\") {\n        await Publisher.create({\n          userId: user._id,\n          publisherType: null, // will be added later\n          subscriptionStatus: \"expired\",\n        });\n      }\n    }\n\n    // OTP correct -> remove from Redis\n    await redis.del(`otp:${email}`);\n\n    const token = generateToken(user);\n\n    res.json({\n      success: true,\n      message: \"Login successful\",\n      token,\n      user,\n    });\n\n  } catch (err) {\n    res.status(500).json({ message: err.message });\n  }\n};\n"
+        }
+    ]
+}
