@@ -168,6 +168,9 @@ exports.verifyOtp = async (req, res) => {
 
       // If role is publisher → create publisher profile (with details if provided)
       if (role === "publisher") {
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + 30); // 30-day free trial
+
         await Publisher.create({
           userId: user._id,
           publisherType: publisherType || null,
@@ -178,7 +181,8 @@ exports.verifyOtp = async (req, res) => {
           website: website || "",
           description: description || "",
           address: address || "",
-          subscriptionStatus: "expired",
+          subscriptionStatus: "active",
+          subscriptionExpiry: expiry,
         });
       }
     }
@@ -217,6 +221,9 @@ exports.verifyOtp = async (req, res) => {
             await Publisher.updateOne({ _id: existingPublisher._id }, updatesPub);
           }
         } else {
+          const expiry = new Date();
+          expiry.setDate(expiry.getDate() + 30); // 30-day free trial
+
           await Publisher.create({
             userId: user._id,
             publisherType: publisherType || null,
@@ -227,7 +234,8 @@ exports.verifyOtp = async (req, res) => {
             website: website || "",
             description: description || "",
             address: address || "",
-            subscriptionStatus: "expired",
+            subscriptionStatus: "active",
+            subscriptionExpiry: expiry,
           });
         }
       }

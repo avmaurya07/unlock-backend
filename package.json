@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "seed:admin": "node scripts/createAdmin.js"
+    "seed:admin": "node scripts/createAdmin.js",
+    "dev": "node server.js"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +24,7 @@
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
     "redis": "^5.10.0",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "razorpay": "^2.8.3"
   }
 }

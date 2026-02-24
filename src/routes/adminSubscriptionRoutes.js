@@ -10,6 +10,8 @@ const {
 
   createOrUpdateServicePlan,
   getServicePlan,
+  getSubscriptionConfig,
+  updateSubscriptionConfig,
 
   extendPublisherSubscription,
   suspendPublisherSubscription
@@ -20,6 +22,9 @@ router.get("/plan", protect, role("admin"), getSubscriptionPlans);
 
 router.post("/service", protect, role("admin"), createOrUpdateServicePlan);
 router.get("/service", protect, role("admin"), getServicePlan);
+
+router.get("/config", protect, role("admin"), getSubscriptionConfig);
+router.put("/config", protect, role("admin"), updateSubscriptionConfig);
 
 router.post("/extend/:publisherId", protect, role("admin"), extendPublisherSubscription);
 router.post("/suspend/:publisherId", protect, role("admin"), suspendPublisherSubscription);

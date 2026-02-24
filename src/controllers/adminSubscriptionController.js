@@ -2,16 +2,70 @@ const SubscriptionPlan = require("../models/SubscriptionPlan");
 const ServicePlan = require("../models/ServicePlan");
 const Publisher = require("../models/Publisher");
 
+// Get consolidated subscription config for admin UI
+exports.getSubscriptionConfig = async (req, res) => {
+  try {
+    const plans = await SubscriptionPlan.find({ isActive: true });
+    const service = await ServicePlan.findOne({});
+
+    const planMap = {};
+    for (const p of plans) {
+      planMap[String(p.durationInMonths)] = p.price;
+    }
+
+    const config = {
+      plans: {
+        3: planMap['3'] || 0,
+        6: planMap['6'] || 0,
+        9: planMap['9'] || 0,
+        12: planMap['12'] || 0,
+      },
+      serviceListingYearlyFee: service?.yearlyPrice || 0,
+      currency: process.env.CURRENCY || 'INR'
+    };
+
+    return res.json({ success: true, config });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// Update consolidated config (admin)
+exports.updateSubscriptionConfig = async (req, res) => {
+  try {
+    const { plans = {}, serviceListingYearlyFee } = req.body;
+
+    // upsert individual plans
+    for (const duration of [3,6,9,12]) {
+      if (plans[String(duration)] !== undefined) {
+        await SubscriptionPlan.findOneAndUpdate(
+          { durationInMonths: duration },
+          { price: Number(plans[String(duration)]) || 0, isActive: true },
+          { new: true, upsert: true }
+        );
+      }
+    }
+
+    if (serviceListingYearlyFee !== undefined) {
+      await ServicePlan.findOneAndUpdate({}, { yearlyPrice: Number(serviceListingYearlyFee) || 0 }, { new: true, upsert: true });
+    }
+
+    return res.json({ success: true, message: 'Config updated' });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 
 // CREATE OR UPDATE Subscription plan (3/6/9 months)
 exports.createOrUpdateSubscriptionPlan = async (req, res) => {
   try {
     const { durationInMonths, price } = req.body;
 
-    if (![3, 6, 9].includes(durationInMonths)) {
+    if (![3, 6, 9, 12].includes(durationInMonths)) {
       return res.status(400).json({
         success: false,
-        message: "Invalid duration. Allowed: 3, 6, 9 months"
+        message: "Invalid duration. Allowed: 3, 6, 9, 12 months"
       });
     }
 

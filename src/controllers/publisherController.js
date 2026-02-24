@@ -37,9 +37,9 @@ exports.createPublisher = async (req, res) => {
       });
     }
 
-    // Start 15-day free trial
+    // Start 30-day free trial
     const expiry = new Date();
-    expiry.setDate(expiry.getDate() + 15);
+    expiry.setDate(expiry.getDate() + 30);
 
     const publisher = await Publisher.create({
       userId: req.user.id,
